@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 describe String do
-  # Let creates a helper method with a memoized value that is cached for the
-  # same example but not across different examples. Let is lazy-evaluated;
-  # it is not evaluated until the first time the method it defines is invoked.
+  # Let creates a helper method with a memoized value that is cached for the same example but not across different examples. Let is lazy-evaluated; it is not evaluated until the first time the method it defines is invoked.
   # https://medium.com/@tomkadwill/all-about-rspec-let-a3b642e08d39
 
   let(:favorite_color) { String.new('blue') }
@@ -39,18 +37,21 @@ end
 
 describe String do
   # Create a let variable that will pass the first test.
+  let(:favorite_food) { String.new('tacos') }
 
   # remove the 'x' before running this test
-  xit 'is equal to tacos' do
+  it 'is equal to tacos' do
     expect(favorite_food).to eq('tacos')
   end
 
   # remove the 'x' before running this test
   context 'when favorite food is updated' do
+    let(:favorite_food) { String.new('pizza') }
     # Change the favorite_food let variable.
 
-    xit 'updates the favorite food' do
+    it 'updates the favorite food' do
       # Write a test that will pass.
+      expect(favorite_food).to eql('pizza')
     end
   end
 end
