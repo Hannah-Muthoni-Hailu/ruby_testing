@@ -70,34 +70,59 @@ describe MagicSeven do
   # Write a test for each of the following methods:
 
   describe '#subtract_four' do
+    it 'subtracts four' do
+      num = 4 
+      result = game.subtract_four(num)
+      expect(result).to eql(0)
+    end
   end
 
   describe '#divide_by_two' do
+    it 'divides by two' do
+      num = 2
+      result = game.divide_by_two(num)
+      expect(result).to eql(1)
+    end
   end
 
   # The following tests will need you to create new instances of MagicSeven with
   # a specific value for the random_number.
   describe '#subtract_random_number' do
+    subject(:game_one) { described_class.new(2) }
+    it 'subtracts a random number' do
+      num = 2
+      result = game_one.subtract_random_number(num)
+      expect(result).to eql(0)
+    end
   end
 
   # The #play method will always return seven! Test this game, using any
   # integer as the random_number. Update the context with the number.
   describe '#play' do
-    context 'when the random number is ...' do
+    context 'when the random number is 2' do
+      subject(:game_two) { described_class.new(2) }
       # remove the 'x' before running this test
-      xit 'will return 7' do
+      it 'will return 7' do
+        res = game_two.play
+        expect(res).to eql(7)
       end
     end
 
-    context 'when the random number is ...' do
+    context 'when the random number is 3' do
+      subject(:game_three) { described_class.new(3) }
       # remove the 'x' before running this test
-      xit 'will return 7' do
+      it 'will return 7' do
+        res = game_three.play
+        expect(res).to eql(7)
       end
     end
 
-    context 'when the random number is ...' do
+    context 'when the random number is 4' do
+      subject(:game_four) { described_class.new(4) }
       # remove the 'x' before running this test
-      xit 'will return 7' do
+      it 'will return 7' do
+        res = game_four.play
+        expect(res).to eql(7)
       end
     end
   end
