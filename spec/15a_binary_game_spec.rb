@@ -130,17 +130,28 @@ describe BinaryGame do
 
     context 'when user inputs an incorrect value once, then a valid input' do
       before do
+        invalid = 'a'
+        valid = '3'
+        allow(game_input).to receive(:gets).and_return(invalid, valid)
       end
 
-      xit 'completes loop and displays error message once' do
+      it 'completes loop and displays error message once' do
+        expect(game_input).to receive(:puts).with('Input error! Please enter a number between 0 or 10.').once
+        game_input.player_input(0, 10)
       end
     end
 
     context 'when user inputs two incorrect values, then a valid input' do
       before do
+        invalid = 'a'
+        invalid_two = 'b'
+        valid = '3'
+        allow(game_input).to receive(:gets).and_return(invalid, invalid_two, valid)
       end
 
-      xit 'completes loop and displays error message twice' do
+      it 'completes loop and displays error message twice' do
+        expect(game_input).to receive(:puts).with('Input error! Please enter a number between 0 or 10.').twice
+        game_input.player_input(0, 10)
       end
     end
   end
@@ -152,16 +163,19 @@ describe BinaryGame do
   describe '#verify_input' do
     # Located inside #player_input (Looping Script Method)
     # Query Method -> Test the return value
+    subject(:game_two) { described_class.new(0, 10) }
 
     # NOTE: #verify_input will only return a number if it is between?(min, max)
 
     context 'when given a valid input as argument' do
-      xit 'returns valid input' do
+      it 'returns valid input' do
+        expect(game_two.verify_input(0, 10, 3)).to eql(3)
       end
     end
 
     context 'when given invalid input as argument' do
-      xit 'returns nil' do
+      it 'returns nil' do
+        expect(game_two.verify_input(0, 10, 11)).to be_nil
       end
     end
   end
@@ -253,7 +267,9 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game minimum and maximum is 100 and 600' do
-      xit 'returns 9' do
+      subject(:game_six_hundred) { described_class.new(100, 600) }
+      it 'returns 9' do
+        expect(game_six_hundred.maximum_guesses).to eq(9)
       end
     end
   end
@@ -311,7 +327,13 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game_over? is false five times' do
-      xit 'calls display_turn_order five times' do
+      before do
+        allow(search_display).to receive(:game_over?).and_return(false, false, false, false, false, true)
+      end
+
+      it 'calls display_turn_order five times' do
+        expect(game_display).to receive(:display_turn_order).with(search_display).exactly(5).times
+        game_display.display_binary_search(search_display)
       end
     end
   end
@@ -327,21 +349,33 @@ describe BinaryGame do
     #  by calling #display_guess.
 
     # Create a new subject and an instance_double for BinarySearch.
+    subject(:game_turn) { described_class.new(0, 9) }
+    let(:search_item) { instance_double(BinarySearch) }
 
     before do
       # You'll need to create a few method stubs.
+      allow(search_item).to receive(:make_guess)
+      allow(game_turn).to receive(:display_guess).and_return(nil)
+      allow(search_item).to receive(:guess).and_return(1)
+      allow(search_item).to receive(:update_range)
     end
 
     # Command Method -> Test the change in the observable state
-    xit 'increases guess_count by one' do
+    it 'increases guess_count by one' do
+      game_turn.display_turn_order(search_item)
+      expect(game_turn.instance_variable_get(:@guess_count)).to eq(1)
     end
 
     # Method with Outgoing Command -> Test that a message is sent
-    xit 'sends make_guess' do
+    it 'sends make_guess' do
+      expect(search_item).to receive(:make_guess)
+      game_turn.display_turn_order(search_item)
     end
 
     # Method with Outgoing Command -> Test that a message is sent
-    xit 'sends update_range' do
+    it 'sends update_range' do
+      expect(search_item).to receive(:update_range)
+      game_turn.display_turn_order(search_item)
     end
 
     # Using method expectations can be confusing. Stubbing the methods above
